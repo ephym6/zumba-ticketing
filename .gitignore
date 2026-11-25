@@ -4,3 +4,10 @@
 # React Router
 /.react-router/
 /build/
+
+# Build output
+/dist/
+
+# Local environment (holds the real organiser name)
+.env
+.env.local

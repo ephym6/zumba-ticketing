@@ -1,5 +1,268 @@
-body {
-    font-family: sans-serif;
-    padding: 2rem;
-    text-align: center;
+@import "tailwindcss";
+
+@theme {
+    --color-plum: #2B0F3A;
+    --color-plum-light: #4A1D63;
+    --color-pink: #FF3D7F;
+    --color-pink-dark: #E02666;
+    --color-mango: #FFC53D;
+    --color-ink: #21142A;
+    --color-muted: #6E5E78;
+    --color-line: #E4DCE8;
+    --color-wash: #FBF7FC;
+
+    --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+    --font-sans: "Figtree", system-ui, sans-serif;
+}
+
+@layer base {
+    html {
+        background: var(--color-plum);
+    }
+
+    body {
+        margin: 0;
+        font-family: var(--font-sans);
+        color: var(--color-ink);
+        background: var(--color-wash);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    :focus-visible {
+        outline: 3px solid var(--color-pink);
+        outline-offset: 2px;
+    }
+}
+
+@layer components {
+    /* Poster band: plum, with soft spotlights like a dance floor. */
+    .poster {
+        color: #fff;
+        background:
+            radial-gradient(60rem 30rem at 110% -10%, rgba(255, 61, 127, 0.35), transparent 60%),
+            radial-gradient(40rem 24rem at -20% 120%, rgba(255, 197, 61, 0.18), transparent 60%),
+            var(--color-plum);
+    }
+
+    .poster-title {
+        font-family: var(--font-display);
+        font-weight: 800;
+        text-transform: uppercase;
+        line-height: 0.85;
+        letter-spacing: -0.01em;
+        font-size: clamp(4.75rem, 24vw, 8.5rem);
+    }
+
+    .sheet {
+        position: relative;
+    }
+
+    .step-dot {
+        display: grid;
+        place-items: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 999px;
+        background: var(--color-plum);
+        color: var(--color-mango);
+        font-size: 0.875rem;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .input {
+        width: 100%;
+        border: 1.5px solid var(--color-line);
+        border-radius: 0.75rem;
+        background: #fff;
+        padding: 0.75rem 0.9rem;
+        font: inherit;
+        color: var(--color-ink);
+        transition: border-color 120ms;
+    }
+
+    .input::placeholder {
+        color: #A597AD;
+    }
+
+    .input:hover {
+        border-color: #CBBCD3;
+    }
+
+    .input:focus-visible {
+        outline: none;
+        border-color: var(--color-plum-light);
+        box-shadow: 0 0 0 3px rgba(74, 29, 99, 0.18);
+    }
+
+    .input[aria-invalid="true"] {
+        border-color: var(--color-pink-dark);
+    }
+
+    /* Ticket category tiles (radio buttons). */
+    .tile {
+        cursor: pointer;
+        display: block;
+    }
+
+    .tile-face {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        height: 100%;
+        border: 1.5px solid var(--color-line);
+        border-radius: 1rem;
+        padding: 0.85rem 0.9rem 0.95rem;
+        color: var(--color-ink);
+        transition: background-color 120ms, border-color 120ms, color 120ms;
+    }
+
+    .tile:hover .tile-face {
+        border-color: #CBBCD3;
+    }
+
+    .tile-price {
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 2rem;
+        line-height: 1;
+    }
+
+    .tile-price span {
+        font-family: var(--font-sans);
+    }
+
+    .peer:checked + .tile-face {
+        background: var(--color-plum);
+        border-color: var(--color-plum);
+        color: #fff;
+    }
+
+    .peer:checked + .tile-face .tile-price {
+        color: var(--color-mango);
+    }
+
+    .peer:focus-visible + .tile-face {
+        outline: 3px solid var(--color-pink);
+        outline-offset: 2px;
+    }
+
+    .error {
+        border-left: 3px solid var(--color-pink-dark);
+        background: #FFF0F5;
+        border-radius: 0 0.5rem 0.5rem 0;
+        padding: 0.65rem 0.85rem;
+        color: #8A1640;
+        font-size: 0.95rem;
+        line-height: 1.45;
+    }
+
+    .cta {
+        border: 0;
+        border-radius: 999px;
+        background: var(--color-pink);
+        color: #fff;
+        padding: 1rem 1.5rem;
+        font: inherit;
+        font-size: 1.125rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 10px 24px -10px rgba(224, 38, 102, 0.8);
+        transition: background-color 120ms, transform 120ms;
+    }
+
+    .cta:hover {
+        background: var(--color-pink-dark);
+    }
+
+    .cta:active {
+        transform: translateY(1px);
+    }
+
+    /* The ticket: a card with punched notches and a tear line above the QR stub. */
+    .ticket {
+        --notch: 1.1rem;
+        filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.35));
+        animation: print-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    .ticket-top,
+    .ticket-stub {
+        background: #fff;
+        color: var(--color-ink);
+    }
+
+    .ticket-top {
+        border-radius: 1.5rem 1.5rem 0 0;
+        padding: 2.1rem 1.6rem 1.4rem;
+        background: linear-gradient(var(--color-pink) 0 0.5rem, #fff 0.5rem);
+        -webkit-mask: radial-gradient(circle var(--notch) at 0 100%, transparent 98%, #000) left / 51% 100% no-repeat,
+            radial-gradient(circle var(--notch) at 100% 100%, transparent 98%, #000) right / 51% 100% no-repeat;
+        mask: radial-gradient(circle var(--notch) at 0 100%, transparent 98%, #000) left / 51% 100% no-repeat,
+            radial-gradient(circle var(--notch) at 100% 100%, transparent 98%, #000) right / 51% 100% no-repeat;
+    }
+
+    .ticket-stub {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 0 0 1.5rem 1.5rem;
+        padding: 1.6rem 1.6rem 1.5rem;
+        -webkit-mask: radial-gradient(circle var(--notch) at 0 0, transparent 98%, #000) left / 51% 100% no-repeat,
+            radial-gradient(circle var(--notch) at 100% 0, transparent 98%, #000) right / 51% 100% no-repeat;
+        mask: radial-gradient(circle var(--notch) at 0 0, transparent 98%, #000) left / 51% 100% no-repeat,
+            radial-gradient(circle var(--notch) at 100% 0, transparent 98%, #000) right / 51% 100% no-repeat;
+    }
+
+    .ticket-tear {
+        height: 2px;
+        margin: 0 var(--notch);
+        background: #fff linear-gradient(90deg, var(--color-line) 50%, transparent 0) 0 0 / 12px 2px repeat-x;
+    }
+
+    .ticket-event {
+        font-family: var(--font-display);
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 2.25rem;
+        line-height: 0.9;
+        color: var(--color-plum);
+    }
+
+    .ticket-label {
+        font-size: 0.8rem;
+        color: var(--color-muted);
+    }
+
+    .ticket-value {
+        margin: 0.1rem 0 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    .link-light {
+        color: #fff;
+        font-weight: 600;
+        text-decoration: underline;
+        text-decoration-color: rgba(255, 255, 255, 0.4);
+        text-underline-offset: 4px;
+    }
+
+    .link-light:hover {
+        text-decoration-color: var(--color-mango);
+    }
+}
+
+@keyframes print-in {
+    from {
+        opacity: 0;
+        transform: translateY(-1.5rem) scale(0.97);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticket {
+        animation: none;
+    }
 }
